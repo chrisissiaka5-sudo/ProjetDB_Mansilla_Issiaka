@@ -127,3 +127,42 @@ Le coût total des interventions réalisées sur le dernier trimestre, regroupé
 Les coordonnées des partenaires (garages) ayant facturé les interventions les plus chères.
 
 Les véhicules qui n'ont subi aucune intervention depuis plus d'un an.
+
+1. Requête étudiée et opérateurs
+Requête SQL :
+SELECT Nom_client, Prenom_client 
+FROM CLIENT 
+INNER JOIN RESERVATION ON CLIENT.Num_Reservation = RESERVATION.Num_Reservation 
+WHERE RESERVATION.code_categorie = 'CAT5';
+Cette requête utilise 3 opérateurs fondamentaux de l'algèbre relationnelle :
+Une Jointure ($\bowtie$)
+Une Sélection ($\sigma$)
+Une Projection ($\pi$)
+Hypothèses de volumétrie :
+Table CLIENT : 50 lignes.
+Table RESERVATION : 100 lignes.
+Filtre code_categorie = 'CAT5' : correspond à 10 réservations.
+Résultat final : 5 clients distincts.
+2. Arbre 1 : Plan d'exécution non optimisé (Jointure, puis Sélection)
+Dans ce plan non optimisé, le système effectue d'abord la jointure intégrale entre toutes les lignes des deux tables, puis applique le filtre de sélection sur le résultat intermédiaire.
+<img width="1800" height="2630" alt="CAT5 Client Projection Pipeline-2026-11-09-105822" src="https://github.com/user-attachments/assets/b01e5714-2e3d-419b-a15d-1154ffc0fc61" />
+Calcul des instructions (Arbre 1) :
+Étape 1 - Jointure ($\bowtie$) : Chaque ligne de CLIENT (50) est comparée à chaque ligne de RESERVATION (100).
+Coût = $50 \times 100 = 5\,000$ instructions.
+Étape 2 - Sélection ($\sigma$) : Le filtre s'applique sur les 50 lignes issues de la jointure.
+Coût = 50 instructions.
+Étape 3 - Projection ($\pi$) : On extrait les 2 colonnes sur les 5 lignes restantes.Coût = 5 instructions.Coût total de l'Arbre 1 = 5 055 instructions.
+3. Arbre 2 : Plan d'exécution optimisé (Sélection, puis Jointure)
+En appliquant les règles d'optimisation algébrique, on "descend" l'opérateur de sélection au plus près de la source de données. On filtre la table RESERVATION avant d'effectuer la jointure.
+<img width="1800" height="2630" alt="Untitled diagram-2026-11-09-110312" src="https://github.com/user-attachments/assets/491c026b-0f1e-4c77-a399-42f8d3da641f" />
+Calcul des instructions (Arbre 2) :
+Étape 1 - Sélection ($\sigma$) : Le filtre s'applique directement sur les 100 lignes de la table RESERVATION.
+Coût = 100 instructions.
+Étape 2 - Jointure ($\bowtie$) : Les 50 lignes de CLIENT sont comparées uniquement aux 10 lignes filtrées de RESERVATION.
+Coût = $50 \times 10 = 500$ instructions.
+Étape 3 - Projection ($\pi$) : On extrait les 2 colonnes sur les 5 lignes issues de la jointure.
+Coût = 5 instructions.
+Coût total de l'Arbre 2 = 605 instructions
+4. Conclusion
+Le plan d'exécution représenté par l'Arbre 2 est largement optimisé. En exécutant l'opérateur de sélection en premier, le volume de données transitant vers l'opérateur de jointure est drastiquement réduit (de 100 à 10 lignes pour la table de réservation).
+Le nombre total d'instructions passe ainsi de 5 055 à 605, ce qui rend la requête beaucoup plus performante et nettement moins gourmande en ressources pour le SGBD.
