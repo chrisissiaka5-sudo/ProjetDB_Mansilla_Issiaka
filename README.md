@@ -112,7 +112,7 @@ Ce dépôt contient le dossier complet d'analyse pour la conception du système 
 <img width="1600" height="900" alt="WhatsApp Image 2026-10-30 at 11 12 31" src="https://github.com/user-attachments/assets/6f28b713-c3ff-4ef7-aad5-6928b7941b78" />
 
 
-5-1) script :
+5-1) script 
 
 Le responsable de la flotte doit planifier les prochains entretiens des véhicules et évaluer les coûts de réparation récents pour optimiser le budget. Il a aussi besoin de savoir quels véhicules sont actuellement indisponibles à cause de ces interventions.
 
