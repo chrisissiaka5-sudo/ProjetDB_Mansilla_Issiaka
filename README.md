@@ -147,7 +147,7 @@ Résultat final : 5 clients distincts.
 Dans ce plan non optimisé, le système effectue d'abord la jointure intégrale entre toutes les lignes des deux tables, puis applique le filtre de sélection sur le résultat intermédiaire.
 <img width="1800" height="2630" alt="CAT5 Client Projection Pipeline-2026-11-09-105822" src="https://github.com/user-attachments/assets/b01e5714-2e3d-419b-a15d-1154ffc0fc61" />
 Calcul des instructions (Arbre 1) :
-Étape 1 - Jointure ($\bowtie$) : Chaque ligne de CLIENT (50) est comparée à chaque ligne de RESERVATION (100).
+Étape 1 - Jointure (($\bowtie$) : Chaque ligne de CLIENT (50) est comparée à chaque ligne de RESERVATION (100).
 Coût = $50 \times 100 = 5\,000$ instructions.
 Étape 2 - Sélection ($\sigma$) : Le filtre s'applique sur les 50 lignes issues de la jointure.
 Coût = 50 instructions.
